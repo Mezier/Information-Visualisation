@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="code/d3/d3.v4.js" charset="utf-8"></script>
+<title>EU flag</title>
+</head>
+
+<body>
+<svg width="600" height="500px"></svg>
+<script type="text/javascript">
+var num=12 // the number of stars
+var r=30;  // circle' r
+
+var angle=2*Math.PI/num;
+var svg=d3.select("svg")
+svg.append("rect").attr("x",0).attr("y",0).attr("width",550).attr("height",350).style("fill","blue");
+for(i=0; i<num;i++){
+	var x=225+r*Math.cos(angle*i);
+	var y=125+r*Math.sin(angle*i);
+ svg.append("polygon").attr("points", "0,0.9511, 1.0,0.95111, 1.309,0, 1.618,0.9511, 2.618,0.9511, 1.809,1.5388, 2.118,2.4899, 1.309,1.9021, 0.5,2.4899, 0.809,1.5388").attr("fill","yellow").attr("transform", "scale(4), translate("+(x-100)/2+","+(y-60)/2+")")
+}
+</script>
+</body>
+</html>
