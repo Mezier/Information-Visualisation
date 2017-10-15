@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="code/d3/d3.v4.js" charset="utf-8">
+</script>
+<title>无标题文档</title>
+</head>
+
+<body>
+<script type="text/javascript">
+			
+			var w = 500;
+			var h = 50;
+			var dataset = [4, 11, 22, 17, 2, 25, 16];
+			
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			svg.selectAll("rect")
+			    .data(dataset)
+			    .enter()
+			    .append("rect")
+				.attr("x", function(d, i) {
+						return (i * 50) + 25;
+					})
+				.attr("y", 10)
+			   .attr("width", function(d) {
+					return Math.sqrt(+d)*3;
+			   })
+			  .attr("height", function(d) {
+					return Math.sqrt(+d)*3;
+			   })
+			  .attr("fill", function(d) {
+					var c = "green";
+					if(d > 15){
+						c = "green";
+					}else{
+						c = "red";
+					}
+					return c;
+			   });
+			   </script>
+</body>
+</html>

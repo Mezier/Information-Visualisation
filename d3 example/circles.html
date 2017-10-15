@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="code/d3/d3.v4.js" charset="utf-8">
+</script>
+<title>circles</title>
+</head>
+
+<body>
+<svg width="800" height="600"></svg>
+<script type="text/javascript">
+  var num=10;
+  for(i=0;i<num; i++){
+	var x=50+i*50;
+	var y=30+i*50;
+	color="black";
+	if(i%2==0){
+	   color="black";	
+	}else{
+		color="red";
+	}
+	d3.select("svg").append("circle").attr("cx",x).attr("cy",y).attr("r",40).style("fill",color).style("stroke","black").style("opacity",0.7);
+  }
+</script>
+</body>
+</html>
