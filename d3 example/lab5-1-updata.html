@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang = "en" class="tas-com">
+<head>
+	<meta charset="utf-8">
+	<title>D3: Loading svg</title>
+	
+	<script type="text/javascript" src="./d3/d3.v4.js" charset="utf-8"></script>
+	
+</head>
+<body>
+
+	<h1 style="font-weight:bold">histogram</h1>
+	<h3 id = "year_header">Year: 2005</h3>
+	<div>
+		<script type="text/javascript">
+		// Define margins
+			var margin = {top: 10, right: 20, bottom: 20, left: 100};
+			var svg_width=700-margin.left-margin.right;
+			var svg_height=500-margin.top-margin.bottom;
+			display_year = 2005;
+			//define a function to filter the displayed year
+			function yearFilter(value){
+				return (value.Year == display_year)
+			}
+			var dataset;
+			var svg = d3.select("body")
+						.append("svg")
+						.style("background", "aliceblue")
+						.attr("width", 700)
+						.attr("height", 500)
+						.append("g")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");;	
+			
+            var xScale=d3.scaleLinear()
+				                 //  .domain([0, d3.max(dataset, function(d){return +d.Population})])
+				                   .range([0, svg_width-20]);	
+			var yScale=d3.scaleBand()
+	            				//.domain(ydd)
+								.range([0, svg_height-20], 0.1);
+				// Create an x-axis connected to the x scale
+			var xAxis = d3.axisBottom()
+							  .scale(xScale).ticks(5);
+	
+				//Define Y axis
+			var yAxis = d3.axisLeft().scale(yScale); 
+			// call x-axis
+			svg.append("g")
+					.attr("class", "axis")
+					.attr("id", "x-axis")
+					.attr("transform", "translate(0," + svg_height + ")")
+					.call(xAxis);
+					
+			// Call the y axis
+			svg.append("g")
+					.attr("class", "axis")
+					.attr("id", "y-axis")
+					.call(yAxis);
+			function generateVis(){
+			  
+				var filtered_datset = dataset.filter(yearFilter);
+				yScale.domain(filtered_datset.map(function(d){return d.Country;}))
+				//update yaxis too
+				svg.select("#y-axis").call(yAxis);
+			 	 /******** PERFORM DATA JOIN ************/   
+			  	 // Join new data with old elements, if any.
+			  	var bars = 	svg.selectAll("rect")
+				   .data(filtered_datset, function key(d) {
+											return d.Country;
+										});
+			
+			 	// Update the display of existing elelemnts
+			  	bars.transition().duration(500).ease(d3.easeBounce).attr("x", 10)
+				   .attr("y", function(d) {
+					   		return 5+yScale(d.Country);
+					   })
+				   .attr("width", function(d){return xScale(d.Population);})
+				   .attr("height", yScale.bandwidth()-10)
+				   .style("fill", "Green");
+					   
+					   
+			
+				/******** HANDLE ENTER SELECTION ************/
+			  	// Create new elements in the dataset
+			  	bars.enter()
+				   .append("rect")
+					.transition()
+					.duration(500)
+					.ease(d3.easeBounce)
+				   .attr("x", 10)
+				   .attr("y",function(d,i) {
+					   		return 5+yScale(d.Country);
+					   })
+				   .attr("height", yScale.bandwidth()-10)
+				   .attr("width",function(d){return xScale(d.Population);}
+				   )
+				   .style("fill", "Blue");
+				   
+					 bars.exit().remove();
+			  	
+				d3.select("#year_header").text("Year: " + display_year)
+							  
+				
+	
+				
+				
+			}
+
+
+
+			// Load the file data.csv and generate a visualisation based on it
+			d3.csv("./data/Top10WorldPopulations2005_2015.csv", function(error, data){
+			
+				// handle any data loading errors
+				if(error){
+					console.log("Something went wrong");
+					console.log(error);
+				}else{
+					console.log("Data Loaded");
+					
+					// Assign  the data object loaded to the global dataset variable
+					dataset = data;
+					var xdd=dataset.map(function(d){return d.Population});   
+			        var ydd=dataset.map(function(d){return d.Country}); 
+					//max_population = d3.max(dataset, function(d){return +d.Population;})
+										// Update the domain of the x scale
+					xScale.domain([0, d3.max(dataset, function(d){return +d.Population})])
+					yScale.domain(ydd)
+					// Call the x-axis
+					svg.select("#x-axis").call(xAxis);
+					// Call the x-axis
+					svg.select("#y-axis").call(yAxis);
+                   	generateVis();
+					// Iterate through our avilable years.
+					setInterval(function() {
+						display_year = display_year + 1;
+						if(display_year > 2015){
+							display_year = 2005;
+						}
+					  	generateVis();
+					}, 700);
+					
+				}
+			});
+
+		</script>
+        
+	</div>
+	
+</body>	 
+</html>
